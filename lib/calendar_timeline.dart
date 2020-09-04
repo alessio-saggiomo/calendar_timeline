@@ -11,6 +11,7 @@ class CalendarTimeline extends StatefulWidget {
   final DateTime firstDate;
   final DateTime lastDate;
   final SelectableDayPredicate selectableDayPredicate;
+  final bool showWeekEnd;
   final OnDateSelected onDateSelected;
   final double leftMargin;
   final Color dayColor;
@@ -28,6 +29,7 @@ class CalendarTimeline extends StatefulWidget {
     @required this.lastDate,
     @required this.onDateSelected,
     this.selectableDayPredicate,
+    this.showWeekEnd = true,
     this.leftMargin = 0,
     this.dayColor,
     this.activeDayColor,
@@ -36,28 +38,31 @@ class CalendarTimeline extends StatefulWidget {
     this.dotsColor,
     this.dayNameColor,
     this.locale,
-  })  : assert(initialDate != null),
+  })
+      : assert(initialDate != null),
         assert(firstDate != null),
         assert(lastDate != null),
         assert(
-          initialDate.difference(firstDate).inDays >= 0,
-          'initialDate must be on or after firstDate',
+        initialDate
+            .difference(firstDate)
+            .inDays >= 0,
+        'initialDate must be on or after firstDate',
         ),
         assert(
-          !initialDate.isAfter(lastDate),
-          'initialDate must be on or before lastDate',
+        !initialDate.isAfter(lastDate),
+        'initialDate must be on or before lastDate',
         ),
         assert(
-          !firstDate.isAfter(lastDate),
-          'lastDate must be on or after firstDate',
+        !firstDate.isAfter(lastDate),
+        'lastDate must be on or after firstDate',
         ),
         assert(
-          selectableDayPredicate == null || selectableDayPredicate(initialDate),
-          'Provided initialDate must satisfy provided selectableDayPredicate',
+        selectableDayPredicate == null || selectableDayPredicate(initialDate),
+        'Provided initialDate must satisfy provided selectableDayPredicate',
         ),
         assert(
-          locale == null || dateTimeSymbolMap().containsKey(locale),
-          'Provided locale value doesn\'t exist',
+        locale == null || dateTimeSymbolMap().containsKey(locale),
+        'Provided locale value doesn\'t exist',
         ),
         super(key: key);
 
@@ -77,7 +82,10 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   List<DateTime> _days = [];
   DateTime _selectedDate;
 
-  String get _locale => widget.locale ?? Localizations.localeOf(context).languageCode;
+  String get _locale =>
+      widget.locale ?? Localizations
+          .localeOf(context)
+          .languageCode;
 
   @override
   void initState() {
@@ -90,46 +98,40 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
 
-
   @override
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
     _initCalendar();
-    _moveToMonthIndex(_monthSelectedIndex);
     _moveToDayIndex(_daySelectedIndex);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        _buildMonthList(),
-        _buildDayList(),
-      ],
-    );
+    return
+      _buildDayList();
   }
 
   SizedBox _buildDayList() {
     return SizedBox(
-      height: 75,
+      height: 95,
       child: ScrollablePositionedList.builder(
         itemScrollController: _controllerDay,
         initialScrollIndex: _daySelectedIndex,
         initialAlignment: _scrollAlignment,
         scrollDirection: Axis.horizontal,
         itemCount: _days.length,
-        padding: EdgeInsets.only(left: widget.leftMargin, right: 10),
+        padding: EdgeInsets.only(left: widget.leftMargin),
         itemBuilder: (BuildContext context, int index) {
           final currentDay = _days[index];
           final shortName = DateFormat.E(_locale).format(currentDay).capitalize();
-          return Row(
+          final shortmonthName = DateFormat.MMM(_locale).format(currentDay).toUpperCase();
+          return widget.showWeekEnd ? Row(
             children: <Widget>[
               _DayItem(
                 isSelected: _daySelectedIndex == index,
                 dayNumber: currentDay.day,
                 shortName: shortName.length > 3 ? shortName.substring(0, 3) : shortName,
+                shortMonthName: shortmonthName,
                 onTap: () => _goToActualDay(index),
                 available: widget.selectableDayPredicate == null
                     ? true
@@ -141,84 +143,45 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 dayNameColor: widget.dayNameColor,
               ),
               if (index == _days.length - 1)
-                SizedBox(width: MediaQuery.of(context).size.width - widget.leftMargin - 65)
+                SizedBox(width: MediaQuery
+                    .of(context)
+                    .size
+                    .width - widget.leftMargin - 65)
             ],
-          );
+          ) : ((currentDay.weekday == DateTime.saturday || currentDay.weekday == DateTime.sunday) ? null : Row(
+            children: <Widget>[
+              _DayItem(
+                isSelected: _daySelectedIndex == index,
+                dayNumber: currentDay.day,
+                shortName: shortName.length > 3 ? shortName.substring(0, 3) : shortName,
+                shortMonthName: shortmonthName,
+                onTap: () => _goToActualDay(index),
+                available: widget.selectableDayPredicate == null
+                    ? true
+                    : widget.selectableDayPredicate(currentDay),
+                dayColor: widget.dayColor,
+                activeDayColor: widget.activeDayColor,
+                activeDayBackgroundColor: widget.activeBackgroundDayColor,
+                dotsColor: widget.dotsColor,
+                dayNameColor: widget.dayNameColor,
+              ),
+            ],
+          ));
         },
       ),
     );
   }
 
-  Widget _buildMonthList() {
-    return Container(
-      height: 40,
-      child: ScrollablePositionedList.builder(
-        initialScrollIndex: _monthSelectedIndex,
-        initialAlignment: _scrollAlignment,
-        itemScrollController: _controllerMonth,
-        padding: EdgeInsets.only(left: widget.leftMargin),
-        scrollDirection: Axis.horizontal,
-        itemCount: _months.length,
-        itemBuilder: (BuildContext context, int index) {
-          final currentDate = _months[index];
-          final monthName = DateFormat.MMMM(_locale).format(currentDate);
-
-          return Padding(
-            padding: const EdgeInsets.only(right: 12.0, left: 4.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                if (widget.firstDate.year != currentDate.year &&
-                    currentDate.month == 1)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: widget.monthColor, width: 1),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14.0, vertical: 5.0),
-                        child: Text(
-                          DateFormat.y(_locale).format(currentDate),
-                          style: TextStyle(
-                            color: widget.monthColor,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                MonthName(
-                  isSelected: _monthSelectedIndex == index,
-                  name: monthName,
-                  onTap: () => _goToActualMonth(index),
-                  color: widget.monthColor,
-                ),
-                if (index == _months.length - 1)
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width -
-                          widget.leftMargin -
-                          (monthName.length * 10),
-                  )
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
 
   _generateDays(DateTime selectedMonth) {
     _days.clear();
-    for (var i = 1; i <= 31; i++) {
+    for (var i = 1; i <= (widget.lastDate.difference(DateTime.now()).inDays) + DateTime
+        .now()
+        .day; i++) {
       final day = DateTime(selectedMonth.year, selectedMonth.month, i);
-      if (day.difference(widget.firstDate).inDays < 0) continue;
-      if (day.month != selectedMonth.month || day.isAfter(widget.lastDate))
-        break;
+      if (day
+          .difference(widget.firstDate)
+          .inDays < 0) continue;
       _days.add(day);
     }
   }
@@ -235,8 +198,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   _resetCalendar(DateTime date) {
     _generateDays(date);
     _daySelectedIndex = date.month == _selectedDate.month
-      ? _days.indexOf(_days.firstWhere((dayDate) => dayDate.day == _selectedDate.day))
-      : null;
+        ? _days.indexOf(_days.firstWhere((dayDate) => dayDate.day == _selectedDate.day))
+        : null;
     _controllerDay.scrollTo(
       index: _daySelectedIndex ?? 0,
       alignment: _scrollAlignment,
@@ -245,21 +208,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     );
   }
 
-  _goToActualMonth(int index) {
-    _moveToMonthIndex(index);
-    _monthSelectedIndex = index;
-    _resetCalendar(_months[index]);
-    setState(() {});
-  }
 
-  void _moveToMonthIndex(int index) {
-    _controllerMonth.scrollTo(
-      index: index,
-      alignment: _scrollAlignment,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
-  }
 
   _goToActualDay(int index) {
     _moveToDayIndex(index);
@@ -283,7 +232,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _generateMonths();
     _generateDays(_selectedDate);
     _monthSelectedIndex = _months.indexOf(_months.firstWhere((monthDate) =>
-        monthDate.year == widget.initialDate.year &&
+    monthDate.year == widget.initialDate.year &&
         monthDate.month == widget.initialDate.month));
     _daySelectedIndex = _days.indexOf(
         _days.firstWhere((dayDate) => dayDate.day == widget.initialDate.day));
@@ -317,6 +266,7 @@ class MonthName extends StatelessWidget {
 class _DayItem extends StatelessWidget {
   final int dayNumber;
   final String shortName;
+  final String shortMonthName;
   final bool isSelected;
   final Function onTap;
   final Color dayColor;
@@ -330,6 +280,7 @@ class _DayItem extends StatelessWidget {
     Key key,
     @required this.dayNumber,
     @required this.shortName,
+    @required this.shortMonthName,
     @required this.isSelected,
     @required this.onTap,
     this.dayColor,
@@ -340,13 +291,15 @@ class _DayItem extends StatelessWidget {
     this.dayNameColor,
   }) : super(key: key);
 
-  final double height = 70.0;
+  final double height = 90.0;
   final double width = 60.0;
 
   _buildActiveDay(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: activeDayBackgroundColor ?? Theme.of(context).accentColor,
+        color: activeDayBackgroundColor ?? Theme
+            .of(context)
+            .accentColor,
         borderRadius: BorderRadius.circular(12.0),
       ),
       height: height,
@@ -354,7 +307,14 @@ class _DayItem extends StatelessWidget {
       child: Column(
         children: <Widget>[
           SizedBox(height: 7),
-          _buildDots(),
+          Text(
+            shortMonthName,
+            style: TextStyle(
+              color: dayNameColor ?? activeDayColor ?? Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
           SizedBox(height: 12),
           Text(
             dayNumber.toString(),
@@ -378,21 +338,17 @@ class _DayItem extends StatelessWidget {
     );
   }
 
-  Widget _buildDots() {
-    final dot = Container(
-      height: 5,
-      width: 5,
-      decoration: new BoxDecoration(
-        color: this.dotsColor ?? this.activeDayColor ?? Colors.white,
-        shape: BoxShape.circle,
+  Widget _getMonth() {
+    Text(
+      shortMonthName,
+      style: TextStyle(
+        color: dayNameColor ?? activeDayColor ?? Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
       ),
     );
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [dot, dot],
-    );
   }
+
 
   _buildDay(BuildContext context) {
     return GestureDetector(
@@ -404,14 +360,35 @@ class _DayItem extends StatelessWidget {
           children: <Widget>[
             SizedBox(height: 14),
             Text(
+              shortMonthName,
+              style: TextStyle(
+                color: dayNameColor ?? activeDayColor ?? Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+            Text(
               dayNumber.toString(),
               style: TextStyle(
                   color: available
-                      ? dayColor ?? Theme.of(context).accentColor
+                      ? dayColor ?? Theme
+                      .of(context)
+                      .accentColor
                       : dayColor?.withOpacity(0.5) ??
-                          Theme.of(context).accentColor.withOpacity(0.5),
+                      Theme
+                          .of(context)
+                          .accentColor
+                          .withOpacity(0.5),
                   fontSize: 32,
                   fontWeight: FontWeight.normal),
+            ),
+            Text(
+              shortName,
+              style: TextStyle(
+                color: dayNameColor ?? activeDayColor ?? Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
             ),
           ],
         ),
