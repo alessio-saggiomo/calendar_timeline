@@ -101,7 +101,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   @override
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _initCalendar();
+    //_initCalendar();
     _moveToDayIndex(_daySelectedIndex);
   }
 
