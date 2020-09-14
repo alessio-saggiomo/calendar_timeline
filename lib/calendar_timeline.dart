@@ -102,7 +102,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
     //_initCalendar();
-    _moveToDayIndex(_daySelectedIndex);
+    //_moveToDayIndex(_daySelectedIndex);
   }
 
   @override
@@ -211,7 +211,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
 
   _goToActualDay(int index) {
-    _moveToDayIndex(index);
+    //_moveToDayIndex(index);
     _daySelectedIndex = index;
     _selectedDate = _days[index];
     widget.onDateSelected(_selectedDate);
