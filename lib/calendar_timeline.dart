@@ -40,7 +40,7 @@ class CalendarTimeline extends StatefulWidget {
     this.monthColor,
     this.dotsColor,
     this.dayNameColor,
-    final String locale;
+    this.locale,
     this.forecastModelMap,
   })  : assert(initialDate != null),
         assert(firstDate != null),
