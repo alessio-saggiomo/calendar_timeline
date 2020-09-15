@@ -1,6 +1,6 @@
+import 'package:calendar_timeline/forecastModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -23,8 +23,7 @@ class CalendarTimeline extends StatefulWidget {
   final Color dotsColor;
   final Color dayNameColor;
   final String rainChance;
-  final String forecastImgPath;
-  final String locale;
+  final List<ForecastModel> forecastModelList;
 
   CalendarTimeline({
     Key key,
@@ -42,8 +41,7 @@ class CalendarTimeline extends StatefulWidget {
     this.dotsColor,
     this.dayNameColor,
     this.rainChance,
-    this.forecastImgPath,
-    this.locale,
+    this.forecastModelList,
   })  : assert(initialDate != null),
         assert(firstDate != null),
         assert(lastDate != null),
@@ -145,8 +143,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                       activeDayBackgroundColor: widget.activeBackgroundDayColor,
                       dotsColor: widget.dotsColor,
                       dayNameColor: widget.dayNameColor,
-                      rainChance: widget.rainChance,
-                      forecastImgPath: widget.forecastImgPath,
+                      forecastModel: widget.forecastModelList[index],
                     ),
                     if (index == _days.length - 1)
                       SizedBox(
@@ -177,8 +174,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                               widget.activeBackgroundDayColor,
                           dotsColor: widget.dotsColor,
                           dayNameColor: widget.dayNameColor,
-                          rainChance: widget.rainChance,
-                          forecastImgPath: widget.forecastImgPath,
+                          forecastModel: widget.forecastModelList[index],
                         ),
                       ],
                     ));
@@ -288,8 +284,7 @@ class _DayItem extends StatelessWidget {
   final bool available;
   final Color dotsColor;
   final Color dayNameColor;
-  final String rainChance;
-  final String forecastImgPath;
+  final ForecastModel forecastModel;
 
   const _DayItem({
     Key key,
@@ -304,8 +299,7 @@ class _DayItem extends StatelessWidget {
     this.available = true,
     this.dotsColor,
     this.dayNameColor,
-    this.rainChance,
-    this.forecastImgPath,
+    this.forecastModel,
   }) : super(key: key);
 
   final double height = 150.0;
@@ -353,7 +347,7 @@ class _DayItem extends StatelessWidget {
             children: [
               Container(
                   child: Image.network(
-                forecastImgPath,
+                forecastModel.forecastImgPath,
                 height: 45,
                 width: 45,
                 fit: BoxFit.fill,
@@ -367,7 +361,7 @@ class _DayItem extends StatelessWidget {
                 ),
               ),
               Text(
-                rainChance + '%',
+                forecastModel.rainChance + '%',
                 style: TextStyle(
                   color: dayNameColor ?? activeDayColor ?? Colors.white,
                   fontWeight: FontWeight.bold,
@@ -433,7 +427,7 @@ class _DayItem extends StatelessWidget {
                 children: [
                   Container(
                       child: Image.network(
-                    forecastImgPath,
+                    forecastModel.forecastImgPath,
                     height: 45,
                     width: 45,
                     fit: BoxFit.fill,
@@ -447,7 +441,7 @@ class _DayItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    rainChance + '%',
+                    forecastModel.rainChance + '%',
                     style: TextStyle(
                       color: dayNameColor ?? activeDayColor ?? Colors.white,
                       fontWeight: FontWeight.bold,
