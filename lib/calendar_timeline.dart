@@ -22,7 +22,7 @@ class CalendarTimeline extends StatefulWidget {
   final Color monthColor;
   final Color dotsColor;
   final Color dayNameColor;
-  final String rainChance;
+  final String locale;
   final Map forecastModelMap;
 
   CalendarTimeline({
@@ -40,7 +40,7 @@ class CalendarTimeline extends StatefulWidget {
     this.monthColor,
     this.dotsColor,
     this.dayNameColor,
-    this.rainChance,
+    final String locale;
     this.forecastModelMap,
   })  : assert(initialDate != null),
         assert(firstDate != null),
