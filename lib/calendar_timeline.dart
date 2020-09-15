@@ -1,4 +1,3 @@
-import 'package:calendar_timeline/drop_icon_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/date_symbol_data_local.dart';
