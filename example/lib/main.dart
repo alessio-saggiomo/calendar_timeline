@@ -1,4 +1,5 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:example/forecastModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -35,7 +36,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   DateTime _selectedDate;
 
   @override
@@ -50,6 +50,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    ForecastModel forecastModel = new ForecastModel();
+    forecastModel.rainChance = 10.toString();
+    forecastModel.forecastImgPath = 'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
     return Scaffold(
       backgroundColor: Color(0xFF333A47),
       body: SafeArea(
@@ -69,33 +72,36 @@ class _HomePageState extends State<HomePage> {
             CalendarTimeline(
               initialDate: _selectedDate,
               firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(Duration(days: 365)),
+              lastDate: DateTime.now().add(Duration(days: 60)),
               onDateSelected: (date) {
                 setState(() {
                   _selectedDate = date;
                 });
               },
-              leftMargin: 20,
-              monthColor: Colors.white70,
+              monthColor: Colors.blueGrey,
               dayColor: Colors.teal[200],
-              dayNameColor: Color(0xFF333A47),
               activeDayColor: Colors.white,
               activeBackgroundDayColor: Colors.redAccent[100],
               dotsColor: Color(0xFF333A47),
-              selectableDayPredicate: (date) => date.day != 23,
-              locale: 'en',
+              showWeekEnd: false,
+              rainChance: forecastModel.rainChance,
+              forecastImgPath: forecastModel.forecastImgPath,
+              locale: 'it',
             ),
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: FlatButton(
                 color: Colors.teal[200],
-                child: Text('RESET', style: TextStyle(color: Color(0xFF333A47))),
+                child:
+                    Text('RESET', style: TextStyle(color: Color(0xFF333A47))),
                 onPressed: () => setState(() => _resetSelectedDate()),
               ),
             ),
             SizedBox(height: 20),
-            Center(child: Text('Selected date is $_selectedDate', style: TextStyle(color: Colors.white)))
+            Center(
+                child: Text('Selected date is $_selectedDate',
+                    style: TextStyle(color: Colors.white)))
           ],
         ),
       ),

@@ -1,8 +1,10 @@
+import 'package:calendar_timeline/drop_icon_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+
 
 typedef OnDateSelected = void Function(DateTime);
 
@@ -20,6 +22,8 @@ class CalendarTimeline extends StatefulWidget {
   final Color monthColor;
   final Color dotsColor;
   final Color dayNameColor;
+  final String rainChance;
+  final String forecastImgPath;
   final String locale;
 
   CalendarTimeline({
@@ -37,6 +41,8 @@ class CalendarTimeline extends StatefulWidget {
     this.monthColor,
     this.dotsColor,
     this.dayNameColor,
+    this.rainChance,
+    this.forecastImgPath,
     this.locale,
   })
       : assert(initialDate != null),
@@ -113,7 +119,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
   SizedBox _buildDayList() {
     return SizedBox(
-      height: 95,
+      height: 115,
       child: ScrollablePositionedList.builder(
         itemScrollController: _controllerDay,
         initialScrollIndex: _daySelectedIndex,
@@ -141,6 +147,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 activeDayBackgroundColor: widget.activeBackgroundDayColor,
                 dotsColor: widget.dotsColor,
                 dayNameColor: widget.dayNameColor,
+                rainChance: widget.rainChance,
+                forecastImgPath: widget.forecastImgPath,
               ),
               if (index == _days.length - 1)
                 SizedBox(width: MediaQuery
@@ -164,6 +172,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                 activeDayBackgroundColor: widget.activeBackgroundDayColor,
                 dotsColor: widget.dotsColor,
                 dayNameColor: widget.dayNameColor,
+                rainChance: widget.rainChance,
+                forecastImgPath: widget.forecastImgPath,
               ),
             ],
           ));
@@ -275,6 +285,8 @@ class _DayItem extends StatelessWidget {
   final bool available;
   final Color dotsColor;
   final Color dayNameColor;
+  final String rainChance;
+  final String forecastImgPath;
 
   const _DayItem({
     Key key,
@@ -289,10 +301,12 @@ class _DayItem extends StatelessWidget {
     this.available = true,
     this.dotsColor,
     this.dayNameColor,
+    this.rainChance,
+    this.forecastImgPath,
   }) : super(key: key);
 
-  final double height = 90.0;
-  final double width = 60.0;
+  final double height = 150.0;
+  final double width = 75.0;
 
   _buildActiveDay(BuildContext context) {
     return Container(
@@ -333,6 +347,24 @@ class _DayItem extends StatelessWidget {
               fontSize: 14,
             ),
           ),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(height: 25, width: 25, child: Image.network(forecastImgPath)),
+                  Container(height: 16, width: 16, child: Image.network('https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_90.png')),
+                  Text(
+                    rainChance + '%',
+                    style: TextStyle(
+                      color: dayNameColor ?? activeDayColor ?? Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 8,
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );
@@ -388,6 +420,24 @@ class _DayItem extends StatelessWidget {
                 color: dayNameColor ?? activeDayColor ?? Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(height: 25, width: 25, child: Image.network(forecastImgPath)),
+                  Container(height: 16, width: 16, child: Image.network('https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_90.png')),
+                  Text(
+                    rainChance + '%',
+                    style: TextStyle(
+                      color: dayNameColor ?? activeDayColor ?? Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 8,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
