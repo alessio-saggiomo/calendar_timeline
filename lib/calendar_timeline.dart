@@ -23,7 +23,7 @@ class CalendarTimeline extends StatefulWidget {
   final Color dotsColor;
   final Color dayNameColor;
   final String rainChance;
-  final List<ForecastModel> forecastModelList;
+  final Map forecastModelMap;
 
   CalendarTimeline({
     Key key,
@@ -41,7 +41,7 @@ class CalendarTimeline extends StatefulWidget {
     this.dotsColor,
     this.dayNameColor,
     this.rainChance,
-    this.forecastModelList,
+    this.forecastModelMap,
   })  : assert(initialDate != null),
         assert(firstDate != null),
         assert(lastDate != null),
@@ -109,6 +109,9 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   }
 
   SizedBox _buildDayList() {
+    List<ForecastModel> forecastModelList = new List<ForecastModel>();
+    widget.forecastModelMap
+        .forEach((k, v) => forecastModelList.add(ForecastModel(k, v)));
     return SizedBox(
       height: 130,
       child: ScrollablePositionedList.builder(
@@ -143,7 +146,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                       activeDayBackgroundColor: widget.activeBackgroundDayColor,
                       dotsColor: widget.dotsColor,
                       dayNameColor: widget.dayNameColor,
-                      forecastModel: widget.forecastModelList[index],
+                      forecastModel: forecastModelList[index],
                     ),
                     if (index == _days.length - 1)
                       SizedBox(
@@ -174,7 +177,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                               widget.activeBackgroundDayColor,
                           dotsColor: widget.dotsColor,
                           dayNameColor: widget.dayNameColor,
-                          forecastModel: widget.forecastModelList[index],
+                          forecastModel: forecastModelList[index],
                         ),
                       ],
                     ));
