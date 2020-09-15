@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
+import 'package:fluttericon/iconic_icons.dart';
 
 typedef OnDateSelected = void Function(DateTime);
 
@@ -43,31 +44,28 @@ class CalendarTimeline extends StatefulWidget {
     this.rainChance,
     this.forecastImgPath,
     this.locale,
-  })
-      : assert(initialDate != null),
+  })  : assert(initialDate != null),
         assert(firstDate != null),
         assert(lastDate != null),
         assert(
-        initialDate
-            .difference(firstDate)
-            .inDays >= 0,
-        'initialDate must be on or after firstDate',
+          initialDate.difference(firstDate).inDays >= 0,
+          'initialDate must be on or after firstDate',
         ),
         assert(
-        !initialDate.isAfter(lastDate),
-        'initialDate must be on or before lastDate',
+          !initialDate.isAfter(lastDate),
+          'initialDate must be on or before lastDate',
         ),
         assert(
-        !firstDate.isAfter(lastDate),
-        'lastDate must be on or after firstDate',
+          !firstDate.isAfter(lastDate),
+          'lastDate must be on or after firstDate',
         ),
         assert(
-        selectableDayPredicate == null || selectableDayPredicate(initialDate),
-        'Provided initialDate must satisfy provided selectableDayPredicate',
+          selectableDayPredicate == null || selectableDayPredicate(initialDate),
+          'Provided initialDate must satisfy provided selectableDayPredicate',
         ),
         assert(
-        locale == null || dateTimeSymbolMap().containsKey(locale),
-        'Provided locale value doesn\'t exist',
+          locale == null || dateTimeSymbolMap().containsKey(locale),
+          'Provided locale value doesn\'t exist',
         ),
         super(key: key);
 
@@ -88,9 +86,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   DateTime _selectedDate;
 
   String get _locale =>
-      widget.locale ?? Localizations
-          .localeOf(context)
-          .languageCode;
+      widget.locale ?? Localizations.localeOf(context).languageCode;
 
   @override
   void initState() {
@@ -102,7 +98,6 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     });
   }
 
-
   @override
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -112,13 +107,12 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      _buildDayList();
+    return _buildDayList();
   }
 
   SizedBox _buildDayList() {
     return SizedBox(
-      height: 115,
+      height: 130,
       child: ScrollablePositionedList.builder(
         itemScrollController: _controllerDay,
         initialScrollIndex: _daySelectedIndex,
@@ -128,69 +122,80 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
         padding: EdgeInsets.only(left: widget.leftMargin),
         itemBuilder: (BuildContext context, int index) {
           final currentDay = _days[index];
-          final shortName = DateFormat.E(_locale).format(currentDay).capitalize();
-          final shortmonthName = DateFormat.MMM(_locale).format(currentDay).toUpperCase();
-          return widget.showWeekEnd ? Row(
-            children: <Widget>[
-              _DayItem(
-                isSelected: _daySelectedIndex == index,
-                dayNumber: currentDay.day,
-                shortName: shortName.length > 3 ? shortName.substring(0, 3) : shortName,
-                shortMonthName: shortmonthName,
-                onTap: () => _goToActualDay(index),
-                available: widget.selectableDayPredicate == null
-                    ? true
-                    : widget.selectableDayPredicate(currentDay),
-                dayColor: widget.dayColor,
-                activeDayColor: widget.activeDayColor,
-                activeDayBackgroundColor: widget.activeBackgroundDayColor,
-                dotsColor: widget.dotsColor,
-                dayNameColor: widget.dayNameColor,
-                rainChance: widget.rainChance,
-                forecastImgPath: widget.forecastImgPath,
-              ),
-              if (index == _days.length - 1)
-                SizedBox(width: MediaQuery
-                    .of(context)
-                    .size
-                    .width - widget.leftMargin - 65)
-            ],
-          ) : ((currentDay.weekday == DateTime.saturday || currentDay.weekday == DateTime.sunday) ? null : Row(
-            children: <Widget>[
-              _DayItem(
-                isSelected: _daySelectedIndex == index,
-                dayNumber: currentDay.day,
-                shortName: shortName.length > 3 ? shortName.substring(0, 3) : shortName,
-                shortMonthName: shortmonthName,
-                onTap: () => _goToActualDay(index),
-                available: widget.selectableDayPredicate == null
-                    ? true
-                    : widget.selectableDayPredicate(currentDay),
-                dayColor: widget.dayColor,
-                activeDayColor: widget.activeDayColor,
-                activeDayBackgroundColor: widget.activeBackgroundDayColor,
-                dotsColor: widget.dotsColor,
-                dayNameColor: widget.dayNameColor,
-                rainChance: widget.rainChance,
-                forecastImgPath: widget.forecastImgPath,
-              ),
-            ],
-          ));
+          final shortName =
+              DateFormat.E(_locale).format(currentDay).capitalize();
+          final shortmonthName =
+              DateFormat.MMM(_locale).format(currentDay).toUpperCase();
+          return widget.showWeekEnd
+              ? Row(
+                  children: <Widget>[
+                    _DayItem(
+                      isSelected: _daySelectedIndex == index,
+                      dayNumber: currentDay.day,
+                      shortName: shortName.length > 3
+                          ? shortName.substring(0, 3)
+                          : shortName,
+                      shortMonthName: shortmonthName,
+                      onTap: () => _goToActualDay(index),
+                      available: widget.selectableDayPredicate == null
+                          ? true
+                          : widget.selectableDayPredicate(currentDay),
+                      dayColor: widget.dayColor,
+                      activeDayColor: widget.activeDayColor,
+                      activeDayBackgroundColor: widget.activeBackgroundDayColor,
+                      dotsColor: widget.dotsColor,
+                      dayNameColor: widget.dayNameColor,
+                      rainChance: widget.rainChance,
+                      forecastImgPath: widget.forecastImgPath,
+                    ),
+                    if (index == _days.length - 1)
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width -
+                              widget.leftMargin -
+                              65)
+                  ],
+                )
+              : ((currentDay.weekday == DateTime.saturday ||
+                      currentDay.weekday == DateTime.sunday)
+                  ? null
+                  : Row(
+                      children: <Widget>[
+                        _DayItem(
+                          isSelected: _daySelectedIndex == index,
+                          dayNumber: currentDay.day,
+                          shortName: shortName.length > 3
+                              ? shortName.substring(0, 3)
+                              : shortName,
+                          shortMonthName: shortmonthName,
+                          onTap: () => _goToActualDay(index),
+                          available: widget.selectableDayPredicate == null
+                              ? true
+                              : widget.selectableDayPredicate(currentDay),
+                          dayColor: widget.dayColor,
+                          activeDayColor: widget.activeDayColor,
+                          activeDayBackgroundColor:
+                              widget.activeBackgroundDayColor,
+                          dotsColor: widget.dotsColor,
+                          dayNameColor: widget.dayNameColor,
+                          rainChance: widget.rainChance,
+                          forecastImgPath: widget.forecastImgPath,
+                        ),
+                      ],
+                    ));
         },
       ),
     );
   }
 
-
   _generateDays(DateTime selectedMonth) {
     _days.clear();
-    for (var i = 1; i <= (widget.lastDate.difference(DateTime.now()).inDays) + DateTime
-        .now()
-        .day; i++) {
+    for (var i = 1;
+        i <=
+            (widget.lastDate.difference(DateTime.now()).inDays) +
+                DateTime.now().day;
+        i++) {
       final day = DateTime(selectedMonth.year, selectedMonth.month, i);
-      if (day
-          .difference(widget.firstDate)
-          .inDays < 0) continue;
+      if (day.difference(widget.firstDate).inDays < 0) continue;
       _days.add(day);
     }
   }
@@ -207,7 +212,8 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   _resetCalendar(DateTime date) {
     _generateDays(date);
     _daySelectedIndex = date.month == _selectedDate.month
-        ? _days.indexOf(_days.firstWhere((dayDate) => dayDate.day == _selectedDate.day))
+        ? _days.indexOf(
+            _days.firstWhere((dayDate) => dayDate.day == _selectedDate.day))
         : null;
     _controllerDay.scrollTo(
       index: _daySelectedIndex ?? 0,
@@ -216,8 +222,6 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
       curve: Curves.easeIn,
     );
   }
-
-
 
   _goToActualDay(int index) {
     //_moveToDayIndex(index);
@@ -241,7 +245,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _generateMonths();
     _generateDays(_selectedDate);
     _monthSelectedIndex = _months.indexOf(_months.firstWhere((monthDate) =>
-    monthDate.year == widget.initialDate.year &&
+        monthDate.year == widget.initialDate.year &&
         monthDate.month == widget.initialDate.month));
     _daySelectedIndex = _days.indexOf(
         _days.firstWhere((dayDate) => dayDate.day == widget.initialDate.day));
@@ -305,14 +309,12 @@ class _DayItem extends StatelessWidget {
   }) : super(key: key);
 
   final double height = 150.0;
-  final double width = 75.0;
+  final double width = 82.0;
 
   _buildActiveDay(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: activeDayBackgroundColor ?? Theme
-            .of(context)
-            .accentColor,
+        color: activeDayBackgroundColor ?? Theme.of(context).accentColor,
         borderRadius: BorderRadius.circular(12.0),
       ),
       height: height,
@@ -346,24 +348,34 @@ class _DayItem extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(height: 25, width: 25, child: Image.network(forecastImgPath)),
-                  Container(height: 16, width: 16, child: Image.network('https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_90.png')),
-                  Text(
-                    rainChance + '%',
-                    style: TextStyle(
-                      color: dayNameColor ?? activeDayColor ?? Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 8,
-                    ),
-                  ),
-                ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                  child: Image.network(
+                forecastImgPath,
+                height: 45,
+                width: 45,
+                fit: BoxFit.fill,
+              )),
+              Container(
+                margin: EdgeInsets.only(left: 4),
+                child: Icon(
+                  Iconic.umbrella,
+                  color: Colors.blue,
+                  size: 14,
+                ),
               ),
-            ),
+              Text(
+                rainChance + '%',
+                style: TextStyle(
+                  color: dayNameColor ?? activeDayColor ?? Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -379,7 +391,6 @@ class _DayItem extends StatelessWidget {
       ),
     );
   }
-
 
   _buildDay(BuildContext context) {
     return GestureDetector(
@@ -402,14 +413,9 @@ class _DayItem extends StatelessWidget {
               dayNumber.toString(),
               style: TextStyle(
                   color: available
-                      ? dayColor ?? Theme
-                      .of(context)
-                      .accentColor
+                      ? dayColor ?? Theme.of(context).accentColor
                       : dayColor?.withOpacity(0.5) ??
-                      Theme
-                          .of(context)
-                          .accentColor
-                          .withOpacity(0.5),
+                          Theme.of(context).accentColor.withOpacity(0.5),
                   fontSize: 32,
                   fontWeight: FontWeight.normal),
             ),
@@ -421,19 +427,31 @@ class _DayItem extends StatelessWidget {
                 fontSize: 14,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+            Container(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(height: 25, width: 25, child: Image.network(forecastImgPath)),
-                  Container(height: 16, width: 16, child: Image.network('https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_90.png')),
+                  Container(
+                      child: Image.network(
+                    forecastImgPath,
+                    height: 45,
+                    width: 45,
+                    fit: BoxFit.fill,
+                  )),
+                  Container(
+                    margin: EdgeInsets.only(left: 4),
+                    child: Icon(
+                      Iconic.umbrella,
+                      color: Colors.blue,
+                      size: 14,
+                    ),
+                  ),
                   Text(
                     rainChance + '%',
                     style: TextStyle(
                       color: dayNameColor ?? activeDayColor ?? Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 8,
+                      fontSize: 10,
                     ),
                   ),
                 ],
