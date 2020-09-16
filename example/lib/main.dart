@@ -54,22 +54,22 @@ class _HomePageState extends State<HomePage> {
     ForecastModel forecastModel = new ForecastModel();
     forecastModel.rainChance = 10.toString();
     forecastModel.forecastImgPath =
-        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_30.png';
     forecastModelList.add(forecastModel);
     forecastModel = new ForecastModel();
     forecastModel.rainChance = 20.toString();
     forecastModel.forecastImgPath =
-        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_30.png';
     forecastModelList.add(forecastModel);
     forecastModel = new ForecastModel();
     forecastModel.rainChance = 30.toString();
     forecastModel.forecastImgPath =
-        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_30.png';
     forecastModelList.add(forecastModel);
     forecastModel = new ForecastModel();
     forecastModel.rainChance = 40.toString();
     forecastModel.forecastImgPath =
-        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_30.png';
     forecastModelList.add(forecastModel);
     forecastModel = new ForecastModel();
     forecastModel.rainChance = 50.toString();

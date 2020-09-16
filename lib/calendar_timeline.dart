@@ -272,6 +272,7 @@ class _DayItem extends StatelessWidget {
 
   _buildActiveDay(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         color: activeDayBackgroundColor ?? Theme.of(context).accentColor,
         borderRadius: BorderRadius.circular(12.0),
@@ -346,6 +347,7 @@ class _DayItem extends StatelessWidget {
     return GestureDetector(
       onTap: available ? onTap : null,
       child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 4),
         height: height,
         width: width,
         child: Column(
