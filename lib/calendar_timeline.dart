@@ -99,8 +99,6 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
   @override
   void didUpdateWidget(CalendarTimeline oldWidget) {
     super.didUpdateWidget(oldWidget);
-    //_initCalendar();
-    //_moveToDayIndex(_daySelectedIndex);
   }
 
   @override
@@ -143,7 +141,9 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                       activeDayBackgroundColor: widget.activeBackgroundDayColor,
                       dotsColor: widget.dotsColor,
                       dayNameColor: widget.dayNameColor,
-                      forecastModel: widget.forecastModelList[index],
+                      forecastModel: index < widget.forecastModelList.length
+                          ? widget.forecastModelList[index]
+                          : null,
                     ),
                     if (index == _days.length - 1)
                       SizedBox(
@@ -174,7 +174,9 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
                               widget.activeBackgroundDayColor,
                           dotsColor: widget.dotsColor,
                           dayNameColor: widget.dayNameColor,
-                          forecastModel: widget.forecastModelList[index],
+                          forecastModel: index < widget.forecastModelList.length
+                              ? widget.forecastModelList[index]
+                              : null,
                         ),
                       ],
                     ));
@@ -196,53 +198,16 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     }
   }
 
-  _generateMonths() {
-    _months.clear();
-    DateTime date = DateTime(widget.firstDate.year, widget.firstDate.month);
-    while (date.isBefore(widget.lastDate)) {
-      _months.add(date);
-      date = DateTime(date.year, date.month + 1);
-    }
-  }
-
-  _resetCalendar(DateTime date) {
-    _generateDays(date);
-    _daySelectedIndex = date.month == _selectedDate.month
-        ? _days.indexOf(
-            _days.firstWhere((dayDate) => dayDate.day == _selectedDate.day))
-        : null;
-    _controllerDay.scrollTo(
-      index: _daySelectedIndex ?? 0,
-      alignment: _scrollAlignment,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
-  }
-
   _goToActualDay(int index) {
-    //_moveToDayIndex(index);
     _daySelectedIndex = index;
     _selectedDate = _days[index];
     widget.onDateSelected(_selectedDate);
     setState(() {});
   }
 
-  void _moveToDayIndex(int index) {
-    _controllerDay.scrollTo(
-      index: index,
-      alignment: _scrollAlignment,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
-  }
-
   _initCalendar() {
     _selectedDate = widget.initialDate;
-    _generateMonths();
     _generateDays(_selectedDate);
-    _monthSelectedIndex = _months.indexOf(_months.firstWhere((monthDate) =>
-        monthDate.year == widget.initialDate.year &&
-        monthDate.month == widget.initialDate.month));
     _daySelectedIndex = _days.indexOf(
         _days.firstWhere((dayDate) => dayDate.day == widget.initialDate.day));
   }
@@ -342,46 +307,37 @@ class _DayItem extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                  child: Image.network(
-                forecastModel.forecastImgPath,
-                height: 45,
-                width: 45,
-                fit: BoxFit.fill,
-              )),
-              Container(
-                margin: EdgeInsets.only(left: 4),
-                child: Icon(
-                  Iconic.umbrella,
-                  color: Colors.blue,
-                  size: 14,
-                ),
-              ),
-              Text(
-                forecastModel.rainChance + '%',
-                style: TextStyle(
-                  color: dayNameColor ?? activeDayColor ?? Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 10,
-                ),
-              ),
-            ],
-          ),
+          forecastModel != null
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                        child: Image.network(
+                      forecastModel.forecastImgPath,
+                      height: 40,
+                      width: 40,
+                      fit: BoxFit.fill,
+                    )),
+                    Container(
+                      margin: EdgeInsets.only(left: 4),
+                      child: Icon(
+                        Iconic.umbrella,
+                        color: Colors.blue,
+                        size: 14,
+                      ),
+                    ),
+                    Text(
+                      forecastModel.rainChance + '%',
+                      style: TextStyle(
+                        color: dayNameColor ?? activeDayColor ?? Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
+                )
+              : Text(''),
         ],
-      ),
-    );
-  }
-
-  Widget _getMonth() {
-    Text(
-      shortMonthName,
-      style: TextStyle(
-        color: dayNameColor ?? activeDayColor ?? Colors.white,
-        fontWeight: FontWeight.bold,
-        fontSize: 14,
       ),
     );
   }
@@ -421,36 +377,36 @@ class _DayItem extends StatelessWidget {
                 fontSize: 14,
               ),
             ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                      child: Image.network(
-                    forecastModel.forecastImgPath,
-                    height: 45,
-                    width: 45,
-                    fit: BoxFit.fill,
-                  )),
-                  Container(
-                    margin: EdgeInsets.only(left: 4),
-                    child: Icon(
-                      Iconic.umbrella,
-                      color: Colors.blue,
-                      size: 14,
-                    ),
-                  ),
-                  Text(
-                    forecastModel.rainChance + '%',
-                    style: TextStyle(
-                      color: dayNameColor ?? activeDayColor ?? Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            forecastModel != null
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                          child: Image.network(
+                        forecastModel.forecastImgPath,
+                        height: 40,
+                        width: 40,
+                        fit: BoxFit.fill,
+                      )),
+                      Container(
+                        margin: EdgeInsets.only(left: 4),
+                        child: Icon(
+                          Iconic.umbrella,
+                          color: Colors.blue,
+                          size: 14,
+                        ),
+                      ),
+                      Text(
+                        forecastModel.rainChance + '%',
+                        style: TextStyle(
+                          color: dayNameColor ?? activeDayColor ?? Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  )
+                : Text(''),
           ],
         ),
       ),

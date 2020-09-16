@@ -1,5 +1,5 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
-import 'package:example/forecastModel.dart';
+import 'package:calendar_timeline/forecastModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -50,9 +50,48 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<ForecastModel> forecastModelList = new List<ForecastModel>();
     ForecastModel forecastModel = new ForecastModel();
     forecastModel.rainChance = 10.toString();
-    forecastModel.forecastImgPath = 'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+    forecastModel.forecastImgPath =
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+    forecastModelList.add(forecastModel);
+    forecastModel = new ForecastModel();
+    forecastModel.rainChance = 20.toString();
+    forecastModel.forecastImgPath =
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+    forecastModelList.add(forecastModel);
+    forecastModel = new ForecastModel();
+    forecastModel.rainChance = 30.toString();
+    forecastModel.forecastImgPath =
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+    forecastModelList.add(forecastModel);
+    forecastModel = new ForecastModel();
+    forecastModel.rainChance = 40.toString();
+    forecastModel.forecastImgPath =
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+    forecastModelList.add(forecastModel);
+    forecastModel = new ForecastModel();
+    forecastModel.rainChance = 50.toString();
+    forecastModel.forecastImgPath =
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+    forecastModelList.add(forecastModel);
+    forecastModel = new ForecastModel();
+    forecastModel.rainChance = 60.toString();
+    forecastModel.forecastImgPath =
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+    forecastModelList.add(forecastModel);
+    forecastModel = new ForecastModel();
+    forecastModel.rainChance = 70.toString();
+    forecastModel.forecastImgPath =
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+    forecastModelList.add(forecastModel);
+    forecastModel = new ForecastModel();
+    forecastModel.rainChance = 80.toString();
+    forecastModel.forecastImgPath =
+        'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
+    forecastModelList.add(forecastModel);
+
     return Scaffold(
       backgroundColor: Color(0xFF333A47),
       body: SafeArea(
@@ -70,7 +109,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             CalendarTimeline(
-              initialDate: _selectedDate,
+              initialDate: DateTime.now(),
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(Duration(days: 60)),
               onDateSelected: (date) {
@@ -84,8 +123,7 @@ class _HomePageState extends State<HomePage> {
               activeBackgroundDayColor: Colors.redAccent[100],
               dotsColor: Color(0xFF333A47),
               showWeekEnd: false,
-              rainChance: forecastModel.rainChance,
-              forecastImgPath: forecastModel.forecastImgPath,
+              forecastModelList: forecastModelList,
               locale: 'it',
             ),
             SizedBox(height: 20),
