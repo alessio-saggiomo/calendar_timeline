@@ -72,14 +72,11 @@ class CalendarTimeline extends StatefulWidget {
 }
 
 class _CalendarTimelineState extends State<CalendarTimeline> {
-  final ItemScrollController _controllerMonth = ItemScrollController();
   final ItemScrollController _controllerDay = ItemScrollController();
 
-  int _monthSelectedIndex;
   int _daySelectedIndex;
   double _scrollAlignment;
 
-  List<DateTime> _months = [];
   List<DateTime> _days = [];
   DateTime _selectedDate;
 
@@ -309,34 +306,39 @@ class _DayItem extends StatelessWidget {
             ),
           ),
           forecastModel != null
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                        child: Image.network(
-                      forecastModel.forecastImgPath,
-                      height: 40,
-                      width: 40,
-                      fit: BoxFit.fill,
-                    )),
-                    Container(
-                      margin: EdgeInsets.only(left: 4),
-                      child: Icon(
-                        Iconic.umbrella,
-                        color: Colors.blue,
-                        size: 14,
-                      ),
+              ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                            child: Image.network(
+                          forecastModel.forecastImgPath,
+                          height: 40,
+                          width: 40,
+                          fit: BoxFit.fill,
+                        )),
+                        Column(children: [
+                          Container(
+                          margin: EdgeInsets.only(left: 4),
+                          child: Icon(
+                            Iconic.umbrella,
+                            color: Colors.blue,
+                            size: 14,
+                          ),
+                        ),
+                        Text(
+                          forecastModel.rainChance + '%',
+                          style: TextStyle(
+                            color: dayNameColor ?? activeDayColor ?? Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                          ),
+                        ),
+                        ],)
+                      ],
                     ),
-                    Text(
-                      forecastModel.rainChance + '%',
-                      style: TextStyle(
-                        color: dayNameColor ?? activeDayColor ?? Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ],
-                )
+              )
               : Text(''),
         ],
       ),
@@ -380,34 +382,39 @@ class _DayItem extends StatelessWidget {
               ),
             ),
             forecastModel != null
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                          child: Image.network(
-                        forecastModel.forecastImgPath,
-                        height: 40,
-                        width: 40,
-                        fit: BoxFit.fill,
-                      )),
-                      Container(
-                        margin: EdgeInsets.only(left: 4),
-                        child: Icon(
-                          Iconic.umbrella,
-                          color: Colors.blue,
-                          size: 14,
+                ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                            child: Image.network(
+                          forecastModel.forecastImgPath,
+                          height: 40,
+                          width: 40,
+                          fit: BoxFit.fill,
+                        )),
+                        Column(children: [
+                          Container(
+                          margin: EdgeInsets.only(left: 4),
+                          child: Icon(
+                            Iconic.umbrella,
+                            color: Colors.blue,
+                            size: 14,
+                          ),
                         ),
-                      ),
-                      Text(
-                        forecastModel.rainChance + '%',
-                        style: TextStyle(
-                          color: dayNameColor ?? activeDayColor ?? Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
+                        Text(
+                          forecastModel.rainChance + '%',
+                          style: TextStyle(
+                            color: dayNameColor ?? activeDayColor ?? Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                          ),
                         ),
-                      ),
-                    ],
-                  )
+                        ],)
+                      ],
+                    ),
+                )
                 : Text(''),
           ],
         ),
