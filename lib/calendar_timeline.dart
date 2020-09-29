@@ -349,6 +349,7 @@ class _DayItem extends StatelessWidget {
     return GestureDetector(
       onTap: available ? onTap : null,
       child: Container(
+        color: Colors.transparent,
         margin: EdgeInsets.symmetric(horizontal: 4),
         height: height,
         width: width,
