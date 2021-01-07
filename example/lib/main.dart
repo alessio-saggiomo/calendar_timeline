@@ -53,41 +53,57 @@ class _HomePageState extends State<HomePage> {
     List<ForecastModel> forecastModelList = new List<ForecastModel>();
     ForecastModel forecastModel = new ForecastModel();
     forecastModel.rainChance = 10.toString();
+    forecastModel.t_min = 2;
+    forecastModel.t_max = 10;
     forecastModel.forecastImgPath =
         'https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_30.png';
     forecastModelList.add(forecastModel);
     forecastModel = new ForecastModel();
     forecastModel.rainChance = 20.toString();
+    forecastModel.t_min = 2;
+    forecastModel.t_max = 6;
     forecastModel.forecastImgPath =
         'https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_30.png';
     forecastModelList.add(forecastModel);
     forecastModel = new ForecastModel();
     forecastModel.rainChance = 30.toString();
+    forecastModel.t_min = 10;
+    forecastModel.t_max = 24;
     forecastModel.forecastImgPath =
         'https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_30.png';
     forecastModelList.add(forecastModel);
     forecastModel = new ForecastModel();
     forecastModel.rainChance = 40.toString();
+    forecastModel.t_min = 2;
+    forecastModel.t_max = 10;
     forecastModel.forecastImgPath =
         'https://cdn4.3bmeteo.com/images/icone/loc_small/pioggia_30.png';
     forecastModelList.add(forecastModel);
     forecastModel = new ForecastModel();
     forecastModel.rainChance = 50.toString();
+    forecastModel.t_min = 2;
+    forecastModel.t_max = 10;
     forecastModel.forecastImgPath =
         'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
     forecastModelList.add(forecastModel);
     forecastModel = new ForecastModel();
+    forecastModel.t_min = 2;
+    forecastModel.t_max = 10;
     forecastModel.rainChance = 60.toString();
     forecastModel.forecastImgPath =
         'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
     forecastModelList.add(forecastModel);
     forecastModel = new ForecastModel();
     forecastModel.rainChance = 70.toString();
+    forecastModel.t_min = 2;
+    forecastModel.t_max = 10;
     forecastModel.forecastImgPath =
         'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
     forecastModelList.add(forecastModel);
     forecastModel = new ForecastModel();
     forecastModel.rainChance = 80.toString();
+    forecastModel.t_min = 2;
+    forecastModel.t_max = 10;
     forecastModel.forecastImgPath =
         'https://cdn4.3bmeteo.com/images/icone/loc_small/poco_nuvoloso.png';
     forecastModelList.add(forecastModel);

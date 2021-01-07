@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:fluttericon/iconic_icons.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
 
 typedef OnDateSelected = void Function(DateTime);
 
@@ -105,7 +106,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
 
   SizedBox _buildDayList() {
     return SizedBox(
-      height: 130,
+      height: 140,
       child: ScrollablePositionedList.builder(
         itemScrollController: _controllerDay,
         initialScrollIndex: _daySelectedIndex,
@@ -307,38 +308,82 @@ class _DayItem extends StatelessWidget {
           ),
           forecastModel != null
               ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                            child: Image.network(
-                          forecastModel.forecastImgPath,
-                          height: 40,
-                          width: 40,
-                          fit: BoxFit.fill,
-                        )),
-                        Column(children: [
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
                           Container(
-                          margin: EdgeInsets.only(left: 4),
-                          child: Icon(
-                            Iconic.umbrella,
+                              child: Image.network(
+                            forecastModel.forecastImgPath,
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.fill,
+                          )),
+                          Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(left: 4),
+                                child: Icon(
+                                  Iconic.umbrella,
+                                  color: Colors.blue,
+                                  size: 14,
+                                ),
+                              ),
+                              Text(
+                                forecastModel.rainChance + '%',
+                                style: TextStyle(
+                                  color: dayNameColor ??
+                                      activeDayColor ??
+                                      Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            FontAwesome5.temperature_low,
                             color: Colors.blue,
                             size: 14,
                           ),
-                        ),
-                        Text(
-                          forecastModel.rainChance + '%',
-                          style: TextStyle(
-                            color: dayNameColor ?? activeDayColor ?? Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10,
+                          Text(
+                            forecastModel.t_min.toString(),
+                            style: TextStyle(
+                              color: dayNameColor ??
+                                  activeDayColor ??
+                                  Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
                           ),
-                        ),
-                        ],)
-                      ],
-                    ),
-              )
+                          Icon(
+                            FontAwesome5.temperature_high,
+                            color: Colors.red,
+                            size: 14,
+                          ),
+                          Text(
+                            forecastModel.t_max.toString(),
+                            style: TextStyle(
+                              color: dayNameColor ??
+                                  activeDayColor ??
+                                  Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                          )
+
+                        ],
+                      )
+                    ],
+                  ),
+                )
               : Text(''),
         ],
       ),
@@ -384,38 +429,82 @@ class _DayItem extends StatelessWidget {
             ),
             forecastModel != null
                 ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Column(
                       children: [
-                        Container(
-                            child: Image.network(
-                          forecastModel.forecastImgPath,
-                          height: 40,
-                          width: 40,
-                          fit: BoxFit.fill,
-                        )),
-                        Column(children: [
-                          Container(
-                          margin: EdgeInsets.only(left: 4),
-                          child: Icon(
-                            Iconic.umbrella,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                                child: Image.network(
+                              forecastModel.forecastImgPath,
+                              height: 40,
+                              width: 40,
+                              fit: BoxFit.fill,
+                            )),
+                            Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(left: 4),
+                                  child: Icon(
+                                    Iconic.umbrella,
+                                    color: Colors.blue,
+                                    size: 14,
+                                  ),
+                                ),
+                                Text(
+                                  forecastModel.rainChance + '%',
+                                  style: TextStyle(
+                                    color: dayNameColor ??
+                                        activeDayColor ??
+                                        Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                        Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            FontAwesome5.temperature_low,
                             color: Colors.blue,
                             size: 14,
                           ),
-                        ),
-                        Text(
-                          forecastModel.rainChance + '%',
-                          style: TextStyle(
-                            color: dayNameColor ?? activeDayColor ?? Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10,
+                          Text(
+                            forecastModel.t_min.toString(),
+                            style: TextStyle(
+                              color: dayNameColor ??
+                                  activeDayColor ??
+                                  Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
                           ),
-                        ),
-                        ],)
+                          Icon(
+                            FontAwesome5.temperature_high,
+                            color: Colors.red,
+                            size: 14,
+                          ),
+                          Text(
+                            forecastModel.t_max.toString(),
+                            style: TextStyle(
+                              color: dayNameColor ??
+                                  activeDayColor ??
+                                  Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                          )
+
+                        ],
+                      )
                       ],
                     ),
-                )
+                  )
                 : Text(''),
           ],
         ),
